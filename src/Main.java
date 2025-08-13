@@ -1,6 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
-//helooooooodasdsa
+
 public class Main {
     public static void main(String[] args) {
         String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
