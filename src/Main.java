@@ -6,28 +6,32 @@ public class Main {
         String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
         String username = "team404";
         String password = "BrainNotFound";
-
-        promptUser(jdbcURL, username, password);
+        connection(jdbcURL, username, password);
+        promptUser();
     }
-
     /*
-     *promptUser method initiates a while loop to continuously prompt user to enter a SQL query, or exit to exit the loop
-     * and close the program. Will call connection() to connect to the DB
+     *promptUser method initiates a while loop to continuously prompt user to enter a SQL query, or "exit" to exit the loop
+     * and close the program.
      * This method uses a try-with-resources block for the scanner to automatically close connection
      */
-    private static void promptUser(String jdbcURL, String username, String password){
+    private static void promptUser(){
         String userInput;
         try (Scanner scan = new Scanner(System.in)) {
             while (true) {
                 System.out.print("Enter your SQL query or 'exit' to exit: ");
-                userInput = scan.nextLine();
+                userInput = scan.nextLine().trim();
+
                 if (userInput.equalsIgnoreCase("exit")) {
                     System.out.println("App closing, goodbye!");
                     break;
                 }
                 else {
                     System.out.println("SQL Query: " + userInput);
-                    connection(jdbcURL, username, password);
+                    if (validateInput(userInput)){
+                        System.out.println("YOUR KEYWORDS ARE VALID");
+                    }else {
+                        System.out.println("YOUR KEYWORDS ARE INVALID");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -48,8 +52,8 @@ public class Main {
             System.out.println("Connection Successful");
 
             createTable(statement);
-            load_Csv(statement);
-            print_count(statement);
+            loadCsv(statement);
+            printCount(statement);
 
         } catch (SQLException e){
             e.printStackTrace();
@@ -84,7 +88,7 @@ public class Main {
  * Uses MERGE to insert new rows or update existing ones based on the 'Film' column.
  */
 
-    private static void load_Csv(Statement statement) throws SQLException {
+    private static void loadCsv(Statement statement) throws SQLException {
         String csv_path = "C:\\Zinkworks_SQL_Agent_Resources\\films.csv";
         String insertQuery = String.format("""
             MERGE INTO movies (Film,Genre,Lead_Studio,Audience_Score_pc,Profitability,Rotten_Tomatoes_pc,Worldwide_Gross,"Year") KEY(Film)
@@ -98,12 +102,26 @@ public class Main {
  * Counts and prints the total number of rows in the 'movies' table.
  * Executes a SELECT query and iterates through the result set to determine the count.
  */
-    private static void print_count(Statement statement) throws SQLException {
+    private static void printCount(Statement statement) throws SQLException {
         ResultSet rs = statement.executeQuery("Select * From Movies");
         int count = 0;
         while (rs.next()) {
             count ++;
         }
         System.out.println("Loaded " + count +" rows.");
+    }
+
+/*
+ * Validates user input.
+ * Checks if it contains "select *" (case-insensitive),
+ * and does not contain ";", "<", or ">".
+ */
+    private static boolean validateInput(String userInput){
+
+   if(userInput.toLowerCase().contains("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
+       return true;
+   }else {
+       return false;
+   }
     }
 }
