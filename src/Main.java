@@ -10,6 +10,7 @@ public class Main {
         String username = "team404";
         String password = "BrainNotFound";
         connection(jdbcURL,username,password);
+        //while loop - user prompt state
     }
 
     /*
