@@ -1,16 +1,38 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
         String username = "team404";
         String password = "BrainNotFound";
-        connection(jdbcURL,username,password);
-        //while loop - user prompt state
+
+        promptUser(jdbcURL, username, password);
+    }
+
+    /*
+     *promptUser method initiates a while loop to continuously prompt user to enter a SQL query, or exit to exit the loop
+     * and close the program. Will call connection() to connect to the DB
+     * This method uses a try-with-resources block for the scanner to automatically close connection
+     */
+    private static void promptUser(String jdbcURL, String username, String password){
+        String userInput;
+        try (Scanner scan = new Scanner(System.in)) {
+            while (true) {
+                System.out.print("Enter your SQL query or 'exit' to exit: ");
+                userInput = scan.nextLine();
+                if (userInput.equalsIgnoreCase("exit")) {
+                    System.out.println("App closing, goodbye!");
+                    break;
+                }
+                else {
+                    System.out.println("SQL Query: " + userInput);
+                    connection(jdbcURL, username, password);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /*
