@@ -2,11 +2,14 @@ import java.sql.*;
 import java.util.Scanner;
 //helooooooodasdsa
 public class Main {
-    public static void main(String[] args) {
-        String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
-        String username = "team404";
-        String password = "BrainNotFound";
-        connection(jdbcURL, username, password);
+   final static String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
+   final static String username = "team404";
+   final static String password = "BrainNotFound";
+    public static void main(String[] args)  {
+
+        createTable();
+        loadCsv();
+        printCount();
         promptUser();
     }
     /*
@@ -29,6 +32,8 @@ public class Main {
                     System.out.println("SQL Query: " + userInput);
                     if (validateInput(userInput)){
                         System.out.println("YOUR KEYWORDS ARE VALID");
+                        executeQuery(userInput);
+
                     }else {
                         System.out.println("YOUR KEYWORDS ARE INVALID");
                     }
@@ -45,29 +50,18 @@ public class Main {
      * This method uses a try-with-resources block to automatically close connection
      */
 
-    private static void connection(String jdbcURL,String username,String password){
 
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
-            System.out.println("Connection Successful");
-
-            createTable(statement);
-            loadCsv(statement);
-            printCount(statement);
-
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
 
 /*
  * Creates the 'movies' table in the database if it doesn't already exist.
  * Defines columns for film details and ensures 'Film' values are unique.
  */
 
-    private static void createTable(Statement statement) throws SQLException {
-
-        String createTableQuery = """
+    private static void createTable()  {
+        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+             Statement statement = connection.createStatement()){
+            System.out.println("Connection Successful");
+            String createTableQuery = """
             CREATE TABLE IF NOT EXISTS movies (
                 Film VARCHAR(100) UNIQUE,
                 Genre VARCHAR(50),
@@ -79,8 +73,13 @@ public class Main {
                 "Year" INT
             )
             """;
-        statement.execute(createTableQuery);
-        System.out.println("Table 'movies' created.");
+            statement.execute(createTableQuery);
+            System.out.println("Table 'movies' created.");
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
 /*
@@ -88,29 +87,38 @@ public class Main {
  * Uses MERGE to insert new rows or update existing ones based on the 'Film' column.
  */
 
-    private static void loadCsv(Statement statement) throws SQLException {
-        String csv_path = "C:\\Zinkworks_SQL_Agent_Resources\\films.csv";
-        String insertQuery = String.format("""
+    private static void loadCsv(){
+        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+             Statement statement = connection.createStatement()){
+            String csv_path = "C:\\Zinkworks_SQL_Agent_Resources\\films.csv";
+            String insertQuery = String.format("""
             MERGE INTO movies (Film,Genre,Lead_Studio,Audience_Score_pc,Profitability,Rotten_Tomatoes_pc,Worldwide_Gross,"Year") KEY(Film)
             SELECT * FROM CSVREAD('%s')
             """, csv_path);
+            statement.execute(insertQuery);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
-        statement.execute(insertQuery);
     }
 
 /*
  * Counts and prints the total number of rows in the 'movies' table.
  * Executes a SELECT query and iterates through the result set to determine the count.
  */
-    private static void printCount(Statement statement) throws SQLException {
-        ResultSet rs = statement.executeQuery("Select * From Movies");
-        int count = 0;
-        while (rs.next()) {
-            count ++;
+    private static void printCount(){
+        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+             Statement statement = connection.createStatement()){
+            ResultSet rs = statement.executeQuery("Select * From Movies");
+            int count = 0;
+            while (rs.next()) {
+                count ++;
+            }
+            System.out.println("Loaded " + count +" rows.");
+        } catch (SQLException e){
+            e.printStackTrace();
         }
-        System.out.println("Loaded " + count +" rows.");
     }
-
 /*
  * Validates user input.
  * Checks if it contains "select *" (case-insensitive),
@@ -124,4 +132,47 @@ public class Main {
        return false;
    }
     }
+
+/**
+ * Executes the given SQL query and prints the result set.
+ */
+    private static void executeQuery(String validInput){
+        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+             Statement statement = connection.createStatement()){
+            ResultSet rs = statement.executeQuery(validInput);
+            printingResultSet(rs);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+/**
+ * Prints all rows from the given ResultSet with formatted output.
+ */
+    private static void printingResultSet(ResultSet rs)  {
+        int index = 0;
+       try {
+               while(rs.next()){
+                   index++;
+                   String film = rs.getString("Film");
+                   String genre = rs.getString("Genre");
+                   String leadStudio = rs.getString("Lead_Studio");
+                   int audienceScore = rs.getInt("Audience_Score_pc");
+                   double profitability = rs.getDouble("Profitability");
+                   int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
+                   double worldwideGross = rs.getDouble("Worldwide_Gross");
+                   int year = rs.getInt("Year");
+                   System.out.printf(
+                           "NUMBER %d Film Details: | Name: %s | Genre: %s | Lead Studio: %s | Audience Score: %d%% | Profitability: %.2f | Rotten Tomatoes: %d%% | Worldwide Gross: $%.2f | Year: %d%n",
+                           index, film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year
+                   );
+               }
+           System.out.println("FINISHED PRINTING");
+       }
+       catch (SQLException e){
+           System.out.println(e.getMessage());
+       }
+    }
 }
+
+
