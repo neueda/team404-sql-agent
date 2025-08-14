@@ -132,6 +132,18 @@ public class Main {
        return false;
    }
     }
+    /*
+    *validate user input to make sure right table name
+     */
+    private static boolean validateInputTable (String userInput){
+        if(userInput.contains("from movies")){
+            return true;
+        }
+        else {
+            System.out.println("The table is Invalid please try again");
+            return false;
+        }
+    }
 
 /**
  * Executes the given SQL query and prints the result set.
