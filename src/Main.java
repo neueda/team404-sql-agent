@@ -126,7 +126,7 @@ public class Main {
  */
     private static boolean validateInput(String userInput){
 
-   if(userInput.toLowerCase().contains("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
+   if(userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
        return true;
    }else {
        return false;
