@@ -1,4 +1,8 @@
 public class SqlQueries {
+    /**
+     * Contains SQL queries for managing the 'movies' table.
+     * Includes table creation, merging data from a CSV file, and counting rows.
+     */
 
     public static final String CREATE_MOVIES_TABLE = """
         CREATE TABLE IF NOT EXISTS movies (
