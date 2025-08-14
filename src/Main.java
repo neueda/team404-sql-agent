@@ -96,12 +96,11 @@ public class Main {
     private static void printCount(){
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
-            ResultSet rs = statement.executeQuery("Select * From Movies");
-            int count = 0;
-            while (rs.next()) {
-                count ++;
+            ResultSet rs = statement.executeQuery("Select Count(*) From Movies");
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                System.out.println("Loaded " + count + " rows.");
             }
-            System.out.println("Loaded " + count +" rows.");
         } catch (SQLException e){
             e.printStackTrace();
         }
