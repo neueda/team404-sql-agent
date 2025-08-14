@@ -51,19 +51,7 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
             System.out.println("Connection Successful");
-            String createTableQuery = """
-            CREATE TABLE IF NOT EXISTS movies (
-                Film VARCHAR(100) UNIQUE,
-                Genre VARCHAR(50),
-                Lead_Studio VARCHAR(50),
-                Audience_Score_pc INT,
-                Profitability DOUBLE,
-                Rotten_Tomatoes_pc INT,
-                Worldwide_Gross DOUBLE,
-                "Year" INT
-            )
-            """;
-            statement.execute(createTableQuery);
+            statement.execute(SqlQueries.CREATE_MOVIES_TABLE);
             System.out.println("Table 'movies' created.");
 
         } catch (SQLException e){
@@ -81,15 +69,11 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
             String csv_path = "C:\\Zinkworks_SQL_Agent_Resources\\films.csv";
-            String insertQuery = String.format("""
-            MERGE INTO movies (Film,Genre,Lead_Studio,Audience_Score_pc,Profitability,Rotten_Tomatoes_pc,Worldwide_Gross,"Year") KEY(Film)
-            SELECT * FROM CSVREAD('%s')
-            """, csv_path);
+            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csv_path);
             statement.execute(insertQuery);
         } catch (SQLException e){
             e.printStackTrace();
         }
-
     }
 
 /*
@@ -99,7 +83,7 @@ public class Main {
     private static void printCount(){
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
-            ResultSet rs = statement.executeQuery("Select Count(*) From Movies");
+            ResultSet rs = statement.executeQuery(SqlQueries.COUNT_MOVIES);
             if (rs.next()) {
                 int count = rs.getInt(1);
                 System.out.println("Loaded " + count + " rows.");
