@@ -132,9 +132,17 @@ public class Main {
        return false;
    }
     }
-
+    /*
+    *validate user input to make sure right table name
+     */
     private static boolean validateInputTable (String userInput){
-        //do something
+        if(userInput.contains("from movies")){
+            return true;
+        }
+        else {
+            System.out.println("The table is Invalid please try again");
+            return false;
+        }
     }
 
 /**
