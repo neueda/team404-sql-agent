@@ -29,7 +29,10 @@ public class Main {
                     System.out.println("SQL Query: " + userInput);
                     if (validateInput(userInput)) {
                         System.out.println("YOUR KEYWORDS ARE VALID");
-                        executeQuery(userInput);
+                        if (validateInputTable(userInput)) {
+                            System.out.println("Table movies is valid name");
+                            executeQuery(userInput);
+                        }
                     } else {
                         System.out.println("YOUR KEYWORDS ARE INVALID");
                     }
@@ -118,11 +121,12 @@ public class Main {
        return false;
    }
     }
+
     /*
-    *validate user input to make sure right table name
-     */
+    * validate user input to make sure right table name
+    */
     private static boolean validateInputTable (String userInput){
-        if(userInput.contains("from movies")){
+        if(userInput.toLowerCase().contains("from movies")){
             return true;
         }
         else {
