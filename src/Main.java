@@ -133,6 +133,10 @@ public class Main {
    }
     }
 
+    private static boolean validateInputTable (String userInput){
+        //do something
+    }
+
 /**
  * Executes the given SQL query and prints the result set.
  */
