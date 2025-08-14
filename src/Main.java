@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.Scanner;
-//helooooooodasdsa
 public class Main {
    final static String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
    final static String username = "team404";
@@ -17,24 +16,21 @@ public class Main {
      * and close the program.
      * This method uses a try-with-resources block for the scanner to automatically close connection
      */
-    private static void promptUser(){
+    private static void promptUser() {
         String userInput;
         try (Scanner scan = new Scanner(System.in)) {
             while (true) {
                 System.out.print("Enter your SQL query or 'exit' to exit: ");
                 userInput = scan.nextLine().trim();
-
                 if (userInput.equalsIgnoreCase("exit")) {
                     System.out.println("App closing, goodbye!");
                     break;
-                }
-                else {
+                } else {
                     System.out.println("SQL Query: " + userInput);
-                    if (validateInput(userInput)){
+                    if (validateInput(userInput)) {
                         System.out.println("YOUR KEYWORDS ARE VALID");
                         executeQuery(userInput);
-
-                    }else {
+                    } else {
                         System.out.println("YOUR KEYWORDS ARE INVALID");
                     }
                 }
@@ -43,15 +39,6 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
-
-    /*
-     *Establishes a JDBC connection to the specified database and prints a confirmation
-     * message if the connection is successful.
-     * This method uses a try-with-resources block to automatically close connection
-     */
-
-
-
 /*
  * Creates the 'movies' table in the database if it doesn't already exist.
  * Defines columns for film details and ensures 'Film' values are unique.
@@ -104,7 +91,7 @@ public class Main {
 
 /*
  * Counts and prints the total number of rows in the 'movies' table.
- * Executes a SELECT query and iterates through the result set to determine the count.
+ * Executes a SELECT Count query print result.
  */
     private static void printCount(){
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
@@ -146,7 +133,7 @@ public class Main {
     }
 
 /**
- * Executes the given SQL query and prints the result set.
+ * Executes the given SQL query and calls printingResultSet().
  */
     private static void executeQuery(String validInput){
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
