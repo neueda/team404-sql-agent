@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.Scanner;
 public class Main {
-   final static String jdbcURL = "jdbc:h2:file:C:\\Zinkworks_SQL_Agent_Resources\\Sql_Agent_DB;AUTO_SERVER=TRUE";
+    final static String jdbcURL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
    final static String username = "team404";
    final static String password = "BrainNotFound";
     public static void main(String[] args)  {
