@@ -1,9 +1,8 @@
 # Ignore compiled Java classes
 *.class
-
+/target/
+/out/
 
 # IntelliJ IDEA
-.idea/
+/.idea/
 *.iml
-out/
-
