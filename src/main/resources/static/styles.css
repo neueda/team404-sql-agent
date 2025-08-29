@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #1A1F40;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center; 
+    color: #93739C;
+    font-size: 3.5em;
+    margin: 0px;
+    font-family: "Dancing Script", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #030206;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
+    margin-bottom: 50px;
+    background-color: #030206;
+}
+
+nav a {
+    color: #93739C;
+    text-decoration: none;
+    padding: 5px 10px;
+    font-size: 1.1em;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+.main_container {
+    display: grid;
+    /* flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    padding: 30px;
+    background-color: #ECAEFE;
+    max-width: 600px;
+    height: 300px;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+table {
+    grid-row: 2;
+    grid-column: 1 / span 2;
+    background-color: #FAE6FF;
+    margin: 15px;
+    border-radius: 8px;
+}
+
+#user_input {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 8px 12px;
+    margin:5px;
+    max-width: 400px;
+    height: 6em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #FAF6FB;
+}
+::placeholder {
+  color: #93739C;
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+  color: #93739C;
+}
+
+button {
+    grid-column: 2;
+    grid-row: 3;
+    align-items: center;
+    padding: 0px;
+    margin: 15px;
+    background-color: #030206;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 4em;
+    height: 4em;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+#feedback_element {
+    grid-row: 1;
+    grid-column: 1 / span 2;
+    margin: 15px;
+    font-weight: bold;
+}
+
+
