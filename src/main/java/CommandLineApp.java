@@ -1,3 +1,9 @@
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.util.Scanner;
 public class CommandLineApp {
@@ -65,13 +71,26 @@ public class CommandLineApp {
  * Uses MERGE to insert new rows or update existing ones based on the 'Film' column.
  */
 
-    private static void loadCsv(){
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
-            String csv_path = "C:\\Zinkworks_SQL_Agent_Resources\\films.csv";
-            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csv_path);
+    private static void loadCsv() {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = connection.createStatement()) {
+            // Load films.csv from classpath
+            InputStream inputStream = CommandLineApp.class.getClassLoader().getResourceAsStream("films.csv");
+            if (inputStream == null) {
+                throw new FileNotFoundException("films.csv not found in resources!");
+            }
+            // Copy it to a temporary file
+            Path tempFile = Files.createTempFile("films", ".csv");
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            // Convert to absolute path string (important for H2)
+            String csvPath = tempFile.toAbsolutePath().toString();
+            // Format the SQL query
+            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csvPath);
+            // Optional debug
+            System.out.println("Executing MERGE from CSV path: " + csvPath);
+            // Execute the SQL
             statement.execute(insertQuery);
-        } catch (SQLException e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
