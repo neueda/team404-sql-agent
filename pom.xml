@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>SQL_Agent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <build>
         <plugins>
