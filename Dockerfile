@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-ARG JAR_FILE=target/SQL_Agent-1.0-SNAPSHOT-jar-with-dependencies.jar
+ARG JAR_FILE=target/*dependencies.jar
 
 COPY ${JAR_FILE} /app/app.jar
 
