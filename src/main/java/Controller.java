@@ -11,7 +11,12 @@ import static java.util.stream.Collectors.*;
 
 public class Controller {
         public static void main(String[] args) throws Exception {
+<<<<<<< HEAD
             HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0",8080), 0);
+=======
+            //int serverPort = 8080;
+            HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
+>>>>>>> fe63f69995a9c008d5952d558028cc920cab4d24
             server.createContext("/api/hello", (exchange -> {
                 System.out.println("Received request method: " + exchange.getRequestMethod());
 
