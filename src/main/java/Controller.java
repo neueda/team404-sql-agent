@@ -38,8 +38,19 @@ public class Controller {
 
                 exchange.close();
             }));
+
+            server.createContext("/", (exchange -> {
+                System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
+                exchange.sendResponseHeaders(200,0);
+                exchange.close();
+            }));
+
             server.setExecutor(null); //creates a default executor
             server.start();
+            System.out.println("SERVER IS RUNNING......");
+
+
+
         }
 
         public static Map<String, List<String>> splitQuery(String query) {
