@@ -1,5 +1,6 @@
 import com.sun.net.httpserver.HttpServer;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -10,35 +11,50 @@ import static java.util.stream.Collectors.*;
 
 
 public class Controller {
+
+    /* start HTTP server
+    make server context for each end point.
+    create a Handlers request foe each endpoint.
+    function build the response-(Headers).
+
+     */
+    public static HttpServer startServer() throws IOException {
+        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
+        return server;
+    }
+
+    public static void handleHello(HttpServer server){
+        server.createContext("/api/hello", (exchange -> {
+            System.out.println("Received request method: " + exchange.getRequestMethod());
+
+            if ("GET".equals(exchange.getRequestMethod())) {
+                Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
+                String query = params.get("query").getFirst();
+
+                exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+                exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
+                exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
+
+                //String respText = String.format("Hello %s!", query); //forms body
+                String respText = ConvertRS();
+
+                exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
+                OutputStream output = exchange.getResponseBody();
+                output.write(respText.getBytes());
+                output.flush();
+            }
+            else {
+                exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
+            }
+
+            exchange.close(); }));
+
+
+    }
         public static void main(String[] args) throws Exception {
             //int serverPort = 8080;
-            HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
-            server.createContext("/api/hello", (exchange -> {
-                System.out.println("Received request method: " + exchange.getRequestMethod());
-
-                if ("GET".equals(exchange.getRequestMethod())) {
-                    Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
-                    String query = params.get("query").getFirst();
-
-                    exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-                    exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
-                    exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
-
-                    //String respText = String.format("Hello %s!", query); //forms body
-                    String respText = ConvertRS();
-
-                    exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
-                    OutputStream output = exchange.getResponseBody();
-                    output.write(respText.getBytes());
-                    output.flush();
-                }
-                else {
-                    exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
-                }
-
-                exchange.close();
-            }));
-
+            HttpServer server = startServer();
+            handleHello(server);
             server.createContext("/", (exchange -> {
                 System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
                 exchange.sendResponseHeaders(200,0);
@@ -48,8 +64,6 @@ public class Controller {
             server.setExecutor(null); //creates a default executor
             server.start();
             System.out.println("SERVER IS RUNNING......");
-
-
 
         }
 
