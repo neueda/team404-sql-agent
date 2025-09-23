@@ -8,4 +8,4 @@ COPY ${JAR_FILE} /app/app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-cp","/app/app.jar","Controller"]
+ENTRYPOINT ["java","-cp","/app/app.jar","Main"]
