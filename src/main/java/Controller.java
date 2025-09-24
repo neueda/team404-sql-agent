@@ -19,6 +19,7 @@ Controller starts a HTTP server and listens for HTTP requests
 
 public class Controller {
     private static final int PORT = 8080;
+
     /*
      * Creates HTTP server, creates endpoints, calls handler functions for each endpoint
      * */
@@ -39,7 +40,7 @@ public class Controller {
     /*Sends a response to a health check request to confirm that the server is healthy*/
     private void handleHealthCheck(HttpExchange exchange) throws IOException {
         System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
-        exchange.sendResponseHeaders(200,0);
+        exchange.sendResponseHeaders(200, 0);
         exchange.close();
     }
 
@@ -61,8 +62,7 @@ public class Controller {
             OutputStream output = exchange.getResponseBody();
             output.write(respText.getBytes());
             output.flush();
-        }
-        else {
+        } else {
             exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
         }
 
@@ -89,7 +89,7 @@ public class Controller {
     }
 
     /* returns a single line of hardcoded data present for testing and developing the dynamic table on Frontend */
-    private static String ConvertRS () {
+    private static String ConvertRS() {
         String respText = "{";
         int index = 0;
         index++;
@@ -101,7 +101,7 @@ public class Controller {
         String rottenTomatoes = "70";
         String worldwideGross = "profit";
         String year = "2030";
-        respText += String.format("\"%d\": \"%s, %s, %s, %s, %s, %s, %s, %s\"",index, film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
+        respText += String.format("\"%d\": \"%s, %s, %s, %s, %s, %s, %s, %s\"", index, film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
         respText += "}";
         return respText;
     }
