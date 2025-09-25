@@ -61,11 +61,14 @@ public class Controller {
             String respText = ConvertRS();
             //call static validation methods
             if (Database.validateInput(query) && Database.validateInputTable(query)) {
-                Database.executeQuery(query);
+                Map<String,String> mapResults = Database.executeQuery(query);
+
                 //return something in http response
+                respText = mapResults.toString().replace("=", ":");
+                System.out.println(respText);
             }
             else {
-                respText = "Something went wrong";
+                //do we return a message to the frontend
             }
 
             exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length

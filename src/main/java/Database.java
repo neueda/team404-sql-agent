@@ -111,20 +111,21 @@ public class Database {
     /**
     * Executes the given SQL query and calls printingResultSet().
     */
-    public static void executeQuery(String validInput){
+    public static Map<String,String> executeQuery(String validInput){
+        Map<String,String> results = new LinkedHashMap<>();
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
             ResultSet rs = statement.executeQuery(validInput);
-            processResultset(rs);
-            System.out.println(rs);
+            results = processResultset(rs);
         } catch (SQLException e){
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+        return results;
     }
 
-    private static Map<Integer,String> processResultset(ResultSet rs){
-        Map<Integer,String> results = new LinkedHashMap<>();
+    private static Map<String,String> processResultset(ResultSet rs){
+        Map<String,String> results = new LinkedHashMap<>();
         int i = 0;
         try {
             while (rs.next()) {
@@ -137,7 +138,9 @@ public class Database {
                 int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
                 double worldwideGross = rs.getDouble("Worldwide_Gross");
                 int year = rs.getInt("Year");
-                results.put(i,{})
+                String filmDetails = String.format("{\"Name\":\"%s\",\"Genre\":\"%s\",\"Lead Studio\":\"%s\",\"Audience Score\":\"%d%%\",\"Profitability\":\"%.2f\",\"Rotten Tomatoes\":\"%d%%\",\"Worldwide Gross\":\"$%.2f\",\"Year\":\"%d\"}", film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
+                String index = String.format("\"%s\"", i);
+                results.put(index,filmDetails);
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
