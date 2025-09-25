@@ -1,3 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,5 +28,36 @@ public class Database {
             e.printStackTrace();
         }
 
+
     }
+
+    /*
+     * Loads movie data from a CSV file into the 'movies' table.
+     * Uses MERGE to insert new rows or update existing ones based on the 'Film' column.
+     */
+
+    public void loadCsv() {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = connection.createStatement()) {
+            // Load films.csv from classpath
+            InputStream inputStream = CommandLineApp.class.getClassLoader().getResourceAsStream("films.csv");
+            if (inputStream == null) {
+                throw new FileNotFoundException("films.csv not found in resources!");
+            }
+            // Copy it to a temporary file
+            Path tempFile = Files.createTempFile("films", ".csv");
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            // Convert to absolute path string (important for H2)
+            String csvPath = tempFile.toAbsolutePath().toString();
+            // Format the SQL query
+            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csvPath);
+            // Optional debug
+            System.out.println("Executing MERGE from CSV path: " + csvPath);
+            // Execute the SQL
+            statement.execute(insertQuery);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
