@@ -4,6 +4,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Database {
     final static String jdbcURL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
@@ -112,10 +115,34 @@ public class Database {
         try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
              Statement statement = connection.createStatement()){
             ResultSet rs = statement.executeQuery(validInput);
+            processResultset(rs);
             System.out.println(rs);
         } catch (SQLException e){
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private static Map<Integer,String> processResultset(ResultSet rs){
+        Map<Integer,String> results = new LinkedHashMap<>();
+        int i = 0;
+        try {
+            while (rs.next()) {
+                i++;
+                String film = rs.getString("Film");
+                String genre = rs.getString("Genre");
+                String leadStudio = rs.getString("Lead_Studio");
+                int audienceScore = rs.getInt("Audience_Score_pc");
+                double profitability = rs.getDouble("Profitability");
+                int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
+                double worldwideGross = rs.getDouble("Worldwide_Gross");
+                int year = rs.getInt("Year");
+                results.put(i,{})
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return results;
     }
 }
