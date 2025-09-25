@@ -14,15 +14,14 @@ import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
 /*
-Controller starts a HTTP server and listens for HTTP requests
+*Controller starts an HTTP server and listens for HTTP requests
 */
-
 public class Controller {
     private static final int PORT = 8080;
 
-    /*
-     * Creates HTTP server, creates endpoints, calls handler functions for each endpoint
-     * */
+/*
+ * Creates HTTP server, creates endpoints, calls handler functions for each endpoint
+ */
     public void httpStart() throws IOException {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", PORT), 0);
@@ -30,21 +29,25 @@ public class Controller {
             server.createContext("/", this::handleHealthCheck);
             server.setExecutor(null);
             server.start();
-            System.out.println("SERVER IS RUNNING .....");
+            System.out.println("SERVER IS RUNNING ON PORT " + PORT);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    /*Sends a response to a health check request to confirm that the server is healthy*/
+    /*
+    * Sends a response to a health check request to confirm that the server is healthy
+    */
     private void handleHealthCheck(HttpExchange exchange) throws IOException {
         System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
         exchange.sendResponseHeaders(200, 0);
         exchange.close();
     }
 
-    /*Receives request from frontend, sends an appropriate response to the request method*/
+    /*
+    * Receives request from frontend, sends an appropriate response to the request method
+    */
     private void handleQuery(HttpExchange exchange) throws IOException {
         System.out.println("Query endpoint Received request method: " + exchange.getRequestMethod());
         if ("GET".equals(exchange.getRequestMethod())) {
@@ -55,8 +58,18 @@ public class Controller {
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
 
-            //String respText = String.format("Hello %s!", query); //forms body
-            String respText = ConvertRS();
+            String respText = ""; //response body starts empty
+
+            //call static validation methods
+            if (Database.validateInput(query) && Database.validateInputTable(query)) {
+                Map<String,String> mapResults = Database.executeQuery(query);
+                //return results in http response
+                respText = mapResults.toString().replace("=", ":");
+                System.out.println(respText);
+            }
+            else {
+                //do we return a message to the frontend
+            }
 
             exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();
@@ -65,11 +78,12 @@ public class Controller {
         } else {
             exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
         }
-
         exchange.close();
     }
 
-    /*Receives request called query from frontend and splits it into user input*/
+    /*
+    * Receives request called query from frontend and splits it into user input
+    * */
     public static Map<String, List<String>> splitQuery(String query) {
         if (query == null || query.isEmpty()) {
             return Collections.emptyMap();
@@ -79,30 +93,14 @@ public class Controller {
                 .collect(groupingBy(s -> decode(s[0]), mapping(s -> decode(s[1]), toList())));
     }
 
-    /*the userInput from the HTTP request is decoded back into a usable string (English)*/
+    /*
+    * the userInput from the HTTP request is decoded back into a usable string (English)
+    * */
     private static String decode(final String encoded) {
         try {
             return encoded == null ? null : URLDecoder.decode(encoded, "UTF-8");
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 is a required encoding", e);
         }
-    }
-
-    /* returns a single line of hardcoded data present for testing and developing the dynamic table on Frontend */
-    private static String ConvertRS() {
-        String respText = "{";
-        int index = 0;
-        index++;
-        String film = "film";
-        String genre = "genre";
-        String leadStudio = "studio";
-        String audienceScore = "100";
-        String profitability = "profit";
-        String rottenTomatoes = "70";
-        String worldwideGross = "profit";
-        String year = "2030";
-        respText += String.format("\"%d\": \"%s, %s, %s, %s, %s, %s, %s, %s\"", index, film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
-        respText += "}";
-        return respText;
     }
 }
