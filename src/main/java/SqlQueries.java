@@ -13,12 +13,12 @@ public class SqlQueries {
             Profitability DOUBLE,
             Rotten_Tomatoes_pc INT,
             Worldwide_Gross DOUBLE,
-            "Year" INT
+            `Year` INT
         )
     """;
 
     public static final String MERGE_MOVIES_FROM_CSV = """
-        MERGE INTO movies (Film, Genre, Lead_Studio, Audience_Score_pc, Profitability, Rotten_Tomatoes_pc, Worldwide_Gross, "Year") KEY(Film)
+        MERGE INTO movies (Film, Genre, Lead_Studio, Audience_Score_pc, Profitability, Rotten_Tomatoes_pc, Worldwide_Gross, `Year`) KEY(Film)
         SELECT * FROM CSVREAD('%s');
     """;
 
