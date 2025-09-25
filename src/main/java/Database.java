@@ -104,4 +104,18 @@ public class Database {
             return false;
         }
     }
+
+    /**
+    * Executes the given SQL query and calls printingResultSet().
+    */
+    public static void executeQuery(String validInput){
+        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+             Statement statement = connection.createStatement()){
+            ResultSet rs = statement.executeQuery(validInput);
+            System.out.println(rs);
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

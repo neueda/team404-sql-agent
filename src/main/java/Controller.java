@@ -60,8 +60,13 @@ public class Controller {
 
             String respText = ConvertRS();
             //call static validation methods
-            Database.validateInput(query);
-            Database.validateInputTable(query);
+            if (Database.validateInput(query) && Database.validateInputTable(query)) {
+                Database.executeQuery(query);
+                //return something in http response
+            }
+            else {
+                respText = "Something went wrong";
+            }
 
             exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();
