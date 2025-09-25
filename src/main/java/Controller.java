@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
 /*
-*Controller starts a HTTP server and listens for HTTP requests
+*Controller starts an HTTP server and listens for HTTP requests
 */
 public class Controller {
     private static final int PORT = 8080;
@@ -29,7 +29,7 @@ public class Controller {
             server.createContext("/", this::handleHealthCheck);
             server.setExecutor(null);
             server.start();
-            System.out.println("SERVER IS RUNNING .....");
+            System.out.println("SERVER IS RUNNING ON PORT " + PORT);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

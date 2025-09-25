@@ -84,11 +84,11 @@ public class Database {
      * Checks if it contains "select *" (case-insensitive),
      * and does not contain ";", "<", or ">".
      */
-    public static boolean validateInput(String userInput){
-        if(userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
+    public static boolean validateInput(String userInput) {
+        if (userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")) {
             System.out.println("Acceptable syntax received");
             return true;
-        }else {
+        } else {
             System.out.println("The input is Invalid please try again");
             return false;
         }
@@ -97,35 +97,34 @@ public class Database {
     /*
      * validate user input to make sure right table name
      */
-    public static boolean validateInputTable (String userInput){
-        if(userInput.toLowerCase().contains("from movies")){
+    public static boolean validateInputTable(String userInput) {
+        if (userInput.toLowerCase().contains("from movies")) {
             System.out.println("Valid table received");
             return true;
-        }
-        else {
+        } else {
             System.out.println("The table is Invalid please try again");
             return false;
         }
     }
 
     /**
-    * Executes the given SQL query and calls printingResultSet().
-    */
-    public static Map<String,String> executeQuery(String validInput){
-        Map<String,String> results = new LinkedHashMap<>();
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
+     * Executes the given SQL query and calls printingResultSet().
+     */
+    public static Map<String, String> executeQuery(String validInput) {
+        Map<String, String> results = new LinkedHashMap<>();
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(validInput);
             results = processResultset(rs);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return results;
     }
 
-    private static Map<String,String> processResultset(ResultSet rs){
-        Map<String,String> results = new LinkedHashMap<>();
+    private static Map<String, String> processResultset(ResultSet rs) {
+        Map<String, String> results = new LinkedHashMap<>();
         int i = 0;
         try {
             while (rs.next()) {
@@ -140,9 +139,9 @@ public class Database {
                 int year = rs.getInt("Year");
                 String filmDetails = String.format("{\"Name\":\"%s\",\"Genre\":\"%s\",\"Lead Studio\":\"%s\",\"Audience Score\":\"%d%%\",\"Profitability\":\"%.2f\",\"Rotten Tomatoes\":\"%d%%\",\"Worldwide Gross\":\"$%.2f\",\"Year\":\"%d\"}", film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
                 String index = String.format("\"%s\"", i);
-                results.put(index,filmDetails);
+                results.put(index, filmDetails);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
