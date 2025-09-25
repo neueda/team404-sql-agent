@@ -14,15 +14,14 @@ import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.*;
 /*
-Controller starts a HTTP server and listens for HTTP requests
+*Controller starts a HTTP server and listens for HTTP requests
 */
-
 public class Controller {
     private static final int PORT = 8080;
 
-    /*
-     * Creates HTTP server, creates endpoints, calls handler functions for each endpoint
-     * */
+/*
+ * Creates HTTP server, creates endpoints, calls handler functions for each endpoint
+ */
     public void httpStart() throws IOException {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", PORT), 0);
@@ -37,14 +36,18 @@ public class Controller {
         }
     }
 
-    /*Sends a response to a health check request to confirm that the server is healthy*/
+    /*
+    * Sends a response to a health check request to confirm that the server is healthy
+    */
     private void handleHealthCheck(HttpExchange exchange) throws IOException {
         System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
         exchange.sendResponseHeaders(200, 0);
         exchange.close();
     }
 
-    /*Receives request from frontend, sends an appropriate response to the request method*/
+    /*
+    * Receives request from frontend, sends an appropriate response to the request method
+    */
     private void handleQuery(HttpExchange exchange) throws IOException {
         System.out.println("Query endpoint Received request method: " + exchange.getRequestMethod());
         if ("GET".equals(exchange.getRequestMethod())) {
@@ -69,7 +72,9 @@ public class Controller {
         exchange.close();
     }
 
-    /*Receives request called query from frontend and splits it into user input*/
+    /*
+    * Receives request called query from frontend and splits it into user input
+    * */
     public static Map<String, List<String>> splitQuery(String query) {
         if (query == null || query.isEmpty()) {
             return Collections.emptyMap();
@@ -79,7 +84,9 @@ public class Controller {
                 .collect(groupingBy(s -> decode(s[0]), mapping(s -> decode(s[1]), toList())));
     }
 
-    /*the userInput from the HTTP request is decoded back into a usable string (English)*/
+    /*
+    * the userInput from the HTTP request is decoded back into a usable string (English)
+    * */
     private static String decode(final String encoded) {
         try {
             return encoded == null ? null : URLDecoder.decode(encoded, "UTF-8");
@@ -88,7 +95,9 @@ public class Controller {
         }
     }
 
-    /* returns a single line of hardcoded data present for testing and developing the dynamic table on Frontend */
+    /*
+    * returns a single line of hardcoded data present for testing and developing the dynamic table on Frontend
+    */
     private static String ConvertRS() {
         String respText = "{";
         int index = 0;
