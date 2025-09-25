@@ -58,12 +58,12 @@ public class Controller {
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
 
-            String respText = ConvertRS();
+            String respText = ""; //response body starts empty
+
             //call static validation methods
             if (Database.validateInput(query) && Database.validateInputTable(query)) {
                 Map<String,String> mapResults = Database.executeQuery(query);
-
-                //return something in http response
+                //return results in http response
                 respText = mapResults.toString().replace("=", ":");
                 System.out.println(respText);
             }
@@ -102,25 +102,5 @@ public class Controller {
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 is a required encoding", e);
         }
-    }
-
-    /*
-    * returns a single line of hardcoded data present for testing and developing the dynamic table on Frontend
-    */
-    private static String ConvertRS() {
-        String respText = "{";
-        int index = 0;
-        index++;
-        String film = "film";
-        String genre = "genre";
-        String leadStudio = "studio";
-        String audienceScore = "100";
-        String profitability = "profit";
-        String rottenTomatoes = "70";
-        String worldwideGross = "profit";
-        String year = "2030";
-        respText += String.format("\"%d\": \"%s, %s, %s, %s, %s, %s, %s, %s\"", index, film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
-        respText += "}";
-        return respText;
     }
 }
