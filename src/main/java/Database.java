@@ -75,4 +75,33 @@ public class Database {
         }
 
     }
+
+    /*
+     * Validates user input.
+     * Checks if it contains "select *" (case-insensitive),
+     * and does not contain ";", "<", or ">".
+     */
+    public static boolean validateInput(String userInput){
+        if(userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
+            System.out.println("Acceptable syntax received");
+            return true;
+        }else {
+            System.out.println("The input is Invalid please try again");
+            return false;
+        }
+    }
+
+    /*
+     * validate user input to make sure right table name
+     */
+    public static boolean validateInputTable (String userInput){
+        if(userInput.toLowerCase().contains("from movies")){
+            System.out.println("Valid table received");
+            return true;
+        }
+        else {
+            System.out.println("The table is Invalid please try again");
+            return false;
+        }
+    }
 }

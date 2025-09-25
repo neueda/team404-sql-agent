@@ -58,8 +58,10 @@ public class Controller {
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
 
-            //String respText = String.format("Hello %s!", query); //forms body
             String respText = ConvertRS();
+            //call static validation methods
+            Database.validateInput(query);
+            Database.validateInputTable(query);
 
             exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();
@@ -68,7 +70,6 @@ public class Controller {
         } else {
             exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
         }
-
         exchange.close();
     }
 
