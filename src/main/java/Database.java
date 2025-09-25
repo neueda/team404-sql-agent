@@ -3,10 +3,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
     final static String jdbcURL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
@@ -17,14 +14,14 @@ public class Database {
      * Creates the 'movies' table in the database if it doesn't already exist.
      * Defines columns for film details and ensures 'Film' values are unique.
      */
-    public void createTable()  {
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
+    public void createTable() {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = connection.createStatement()) {
             System.out.println("Connection Successful");
             statement.execute(SqlQueries.CREATE_MOVIES_TABLE);
             System.out.println("Table 'movies' created.");
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -60,4 +57,22 @@ public class Database {
         }
     }
 
+    /*
+     * Counts and prints the total number of rows in the 'movies' table.
+     * Executes a SELECT Count query print result.
+     */
+    public void printCount() {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(SqlQueries.COUNT_MOVIES);
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                System.out.println("Loaded " + count + " rows.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+    }
 }

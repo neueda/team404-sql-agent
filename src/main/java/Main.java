@@ -8,5 +8,6 @@ public class Main {
         Database db = new Database();
         db.createTable();
         db.loadCsv();
+        db.printCount();
     }
 }
