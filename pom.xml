@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.example</groupId>
     <artifactId>SQL_Agent</artifactId>
-    <version>1.0.2</version> <!-- Change the version number every time you push an image -->
+    <version>1.0.3</version> <!-- Change the version number every time you push an image -->
 
     <!-- Properties section -->
     <properties>
