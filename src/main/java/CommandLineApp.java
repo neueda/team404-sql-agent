@@ -12,10 +12,12 @@ public class CommandLineApp {
    final static String password = "BrainNotFound";
     public static void main(String[] args)  {
 
-        createTable();
-        loadCsv();
-        printCount();
+        Database db1 = new Database();
+        db1.createTable();
+        db1.loadCsv();
+        db1.printCount();
         promptUser();
+
     }
     /*
      *promptUser method initiates a while loop to continuously prompt user to enter a SQL query, or "exit" to exit the loop
@@ -33,9 +35,9 @@ public class CommandLineApp {
                     break;
                 } else {
                     System.out.println("SQL Query: " + userInput);
-                    if (validateInput(userInput)) {
+                    if (Database.validateInput(userInput)) {
                         System.out.println("YOUR KEYWORDS ARE VALID");
-                        if (validateInputTable(userInput)) {
+                        if (Database.validateInputTable(userInput)) {
                             System.out.println("Table movies is valid name");
                             executeQuery(userInput);
                         }
@@ -53,91 +55,91 @@ public class CommandLineApp {
  * Defines columns for film details and ensures 'Film' values are unique.
  */
 
-    private static void createTable()  {
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
-            System.out.println("Connection Successful");
-            statement.execute(SqlQueries.CREATE_MOVIES_TABLE);
-            System.out.println("Table 'movies' created.");
-
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-
-
-    }
+//    private static void createTable()  {
+//        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+//             Statement statement = connection.createStatement()){
+//            System.out.println("Connection Successful");
+//            statement.execute(SqlQueries.CREATE_MOVIES_TABLE);
+//            System.out.println("Table 'movies' created.");
+//
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
 
 /*
  * Loads movie data from a CSV file into the 'movies' table.
  * Uses MERGE to insert new rows or update existing ones based on the 'Film' column.
  */
 
-    private static void loadCsv() {
-        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-             Statement statement = connection.createStatement()) {
-            // Load films.csv from classpath
-            InputStream inputStream = CommandLineApp.class.getClassLoader().getResourceAsStream("films.csv");
-            if (inputStream == null) {
-                throw new FileNotFoundException("films.csv not found in resources!");
-            }
-            // Copy it to a temporary file
-            Path tempFile = Files.createTempFile("films", ".csv");
-            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
-            // Convert to absolute path string (important for H2)
-            String csvPath = tempFile.toAbsolutePath().toString();
-            // Format the SQL query
-            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csvPath);
-            // Optional debug
-            System.out.println("Executing MERGE from CSV path: " + csvPath);
-            // Execute the SQL
-            statement.execute(insertQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void loadCsv() {
+//        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+//             Statement statement = connection.createStatement()) {
+//            // Load films.csv from classpath
+//            InputStream inputStream = CommandLineApp.class.getClassLoader().getResourceAsStream("films.csv");
+//            if (inputStream == null) {
+//                throw new FileNotFoundException("films.csv not found in resources!");
+//            }
+//            // Copy it to a temporary file
+//            Path tempFile = Files.createTempFile("films", ".csv");
+//            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+//            // Convert to absolute path string (important for H2)
+//            String csvPath = tempFile.toAbsolutePath().toString();
+//            // Format the SQL query
+//            String insertQuery = String.format(SqlQueries.MERGE_MOVIES_FROM_CSV, csvPath);
+//            // Optional debug
+//            System.out.println("Executing MERGE from CSV path: " + csvPath);
+//            // Execute the SQL
+//            statement.execute(insertQuery);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 /*
  * Counts and prints the total number of rows in the 'movies' table.
  * Executes a SELECT Count query print result.
  */
-    private static void printCount(){
-        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
-             Statement statement = connection.createStatement()){
-            ResultSet rs = statement.executeQuery(SqlQueries.COUNT_MOVIES);
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                System.out.println("Loaded " + count + " rows.");
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
+//    private static void printCount(){
+//        try (Connection connection = DriverManager.getConnection(jdbcURL,username,password);
+//             Statement statement = connection.createStatement()){
+//            ResultSet rs = statement.executeQuery(SqlQueries.COUNT_MOVIES);
+//            if (rs.next()) {
+//                int count = rs.getInt(1);
+//                System.out.println("Loaded " + count + " rows.");
+//            }
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//    }
 /*
  * Validates user input.
  * Checks if it contains "select *" (case-insensitive),
  * and does not contain ";", "<", or ">".
  */
-    private static boolean validateInput(String userInput){
-
-   if(userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
-       return true;
-   }else {
-       return false;
-   }
-    }
-
-    /*
-    * validate user input to make sure right table name
-    */
-    private static boolean validateInputTable (String userInput){
-        if(userInput.toLowerCase().contains("from movies")){
-            return true;
-        }
-        else {
-            System.out.println("The table is Invalid please try again");
-            return false;
-        }
-    }
+//    private static boolean validateInput(String userInput){
+//
+//   if(userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")){
+//       return true;
+//   }else {
+//       return false;
+//   }
+//    }
+//
+//    /*
+//    * validate user input to make sure right table name
+//    */
+//    private static boolean validateInputTable (String userInput){
+//        if(userInput.toLowerCase().contains("from movies")){
+//            return true;
+//        }
+//        else {
+//            System.out.println("The table is Invalid please try again");
+//            return false;
+//        }
+//    }
 
 /**
  * Executes the given SQL query and calls printingResultSet().
@@ -155,7 +157,7 @@ public class CommandLineApp {
 /**
  * Prints all rows from the given ResultSet with formatted output.
  */
-    private static void printingResultSet(ResultSet rs)  {
+     private static void printingResultSet(ResultSet rs)  {
         int index = 0;
        try {
                while(rs.next()){
