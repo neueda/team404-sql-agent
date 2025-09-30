@@ -1,6 +1,6 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-
+import org.json.JSONArray;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -48,32 +48,29 @@ public class Controller {
     /*
     * Receives request from frontend, sends an appropriate response to the request method
     */
-    private void handleQuery(HttpExchange exchange) throws IOException {
+    public  void handleQuery(HttpExchange exchange) throws IOException {
         System.out.println("Query endpoint Received request method: " + exchange.getRequestMethod());
         if ("GET".equals(exchange.getRequestMethod())) {
             Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
             String query = params.get("query").getFirst();
-
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
-
-            String respText = ""; //response body starts empty
-
+            //response body starts empty
             //call static validation methods
+            byte[] responseBytes = null;
             if (Database.validateInput(query) && Database.validateInputTable(query)) {
-                Map<String,String> mapResults = Database.executeQuery(query);
+                JSONArray JsonResult = Database.executeQuery(query);
                 //return results in http response
-                respText = mapResults.toString().replace("=", ":");
-                System.out.println(respText);
-            }
-            else {
+                System.out.println(JsonResult);
+                responseBytes = JsonResult.toString().getBytes();
+            } else {
                 //do we return a message to the frontend
             }
 
-            exchange.sendResponseHeaders(200, respText.getBytes().length); //200 OK measures output length
+            exchange.sendResponseHeaders(200, responseBytes.length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();
-            output.write(respText.getBytes());
+            output.write(responseBytes);
             output.flush();
         } else {
             exchange.sendResponseHeaders(405, -1); //405 Method Not Allowed
