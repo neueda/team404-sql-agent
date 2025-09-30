@@ -12,6 +12,7 @@ public class Database {
     final static String jdbcURL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
     final static String username = "team404";
     final static String password = "BrainNotFound";
+    public String userInput;
 
     /*
      * Creates the 'movies' table in the database if it doesn't already exist.
