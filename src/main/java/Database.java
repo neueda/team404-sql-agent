@@ -4,9 +4,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import java.util.HashMap;
+import  org.json.JSONObject;
+import org.json.JSONArray;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 
 public class Database {
     final static String jdbcURL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
@@ -111,8 +113,8 @@ public class Database {
     /**
      * Executes the given SQL query and calls printingResultSet().
      */
-    public static Map<String, String> executeQuery(String validInput) {
-        Map<String, String> results = new LinkedHashMap<>();
+    public static JSONArray executeQuery(String validInput) {
+        JSONArray results = null;
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
              Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(validInput);
@@ -124,28 +126,51 @@ public class Database {
         return results;
     }
 
-    private static Map<String, String> processResultset(ResultSet rs) {
-        Map<String, String> results = new LinkedHashMap<>();
-        int i = 0;
-        try {
-            while (rs.next()) {
-                i++;
-                String film = rs.getString("Film");
-                String genre = rs.getString("Genre");
-                String leadStudio = rs.getString("Lead_Studio");
-                int audienceScore = rs.getInt("Audience_Score_pc");
-                double profitability = rs.getDouble("Profitability");
-                int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
-                double worldwideGross = rs.getDouble("Worldwide_Gross");
-                int year = rs.getInt("Year");
-                String filmDetails = String.format("{\"Name\":\"%s\",\"Genre\":\"%s\",\"Lead Studio\":\"%s\",\"Audience Score\":\"%d%%\",\"Profitability\":\"%.2f\",\"Rotten Tomatoes\":\"%d%%\",\"Worldwide Gross\":\"$%.2f\",\"Year\":\"%d\"}", film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
-                String index = String.format("\"%s\"", i);
-                results.put(index, filmDetails);
+
+    private static JSONArray processResultset(ResultSet rs){
+        JSONArray resultToJson = new JSONArray();
+        try{
+            while (rs.next()){
+                JSONObject row = new JSONObject();
+                row.put("Film", rs.getString("Film"));
+                row.put("Genre", rs.getString("Genre"));
+                row.put("Lead_Studio", rs.getString("Lead_Studio"));
+                row.put("Audience_Score_pc", rs.getInt("Audience_Score_pc"));
+                row.put("Profitability", rs.getDouble("Profitability"));
+                row.put("Rotten_Tomatoes_pc", rs.getInt("Rotten_Tomatoes_pc"));
+                row.put("Worldwide_Gross", rs.getDouble("Worldwide_Gross"));
+                row.put("Year", rs.getInt("Year"));
+
+                resultToJson.put(row);
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return results;
+        return resultToJson;
     }
+
+//    private static Map<String, String> processResultset(ResultSet rs) {
+//        Map<String, String> results = new LinkedHashMap<>();
+//        int i = 0;
+//        try {
+//            while (rs.next()) {
+//                i++;
+//                String film = rs.getString("Film");
+//                String genre = rs.getString("Genre");
+//                String leadStudio = rs.getString("Lead_Studio");
+//                int audienceScore = rs.getInt("Audience_Score_pc");
+//                double profitability = rs.getDouble("Profitability");
+//                int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
+//                double worldwideGross = rs.getDouble("Worldwide_Gross");
+//                int year = rs.getInt("Year");
+//                String filmDetails = String.format("{\"Name\":\"%s\",\"Genre\":\"%s\",\"Lead Studio\":\"%s\",\"Audience Score\":\"%d%%\",\"Profitability\":\"%.2f\",\"Rotten Tomatoes\":\"%d%%\",\"Worldwide Gross\":\"$%.2f\",\"Year\":\"%d\"}", film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
+//                String index = String.format("\"%s\"", i);
+//                results.put(index, filmDetails);
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//        return results;
+//    }
 }
