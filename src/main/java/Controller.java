@@ -1,6 +1,7 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONArray;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -11,7 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 import static java.util.stream.Collectors.*;
+
 /*
  *Controller starts an HTTP server and listens for HTTP requests
  */
@@ -47,13 +50,13 @@ public class Controller {
     /*
      * Receives request from frontend, sends an appropriate response to the request method
      */
-    public  void handleQuery(HttpExchange exchange) throws IOException {
+    public void handleQuery(HttpExchange exchange) throws IOException {
         System.out.println("Query endpoint Received request method: " + exchange.getRequestMethod());
         if ("GET".equals(exchange.getRequestMethod())) {
             Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
             String userInput = params.get("query").getFirst();
             Agent agent = new Agent();
-            String aiResponse =  agent.startAgent(userInput);
+            String aiResponse = agent.startAgent(userInput);
             System.out.println("AI RESPONSE: " + aiResponse);
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
