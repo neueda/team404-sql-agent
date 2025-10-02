@@ -1,6 +1,7 @@
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -64,12 +65,19 @@ public class Controller {
             //response body starts empty
             //call static validation methods
             byte[] responseBytes = null;
+            JSONObject JsonResponseBody = new JSONObject();
+            JsonResponseBody.put("AgentResponse",aiResponse);
             if (Database.validateInput(aiResponse) && Database.validateInputTable(aiResponse)) {
                 JSONArray JsonResult = Database.executeQuery(aiResponse);
+                JsonResponseBody.put("JsonResultSet",JsonResult);
+
                 //return results in http response
                 System.out.println(JsonResult);
-                responseBytes = JsonResult.toString().getBytes();
+
             }
+            responseBytes = JsonResponseBody.toString().getBytes();
+            System.out.println(JsonResponseBody);
+
 
             exchange.sendResponseHeaders(200, responseBytes.length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();
