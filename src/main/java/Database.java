@@ -4,8 +4,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import  org.json.JSONObject;
+
+import org.json.JSONObject;
 import org.json.JSONArray;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -127,10 +129,10 @@ public class Database {
     }
 
 
-    private static JSONArray processResultset(ResultSet rs){
+    private static JSONArray processResultset(ResultSet rs) {
         JSONArray resultToJson = new JSONArray();
-        try{
-            while (rs.next()){
+        try {
+            while (rs.next()) {
                 JSONObject row = new JSONObject();
                 row.put("Film", rs.getString("Film"));
                 row.put("Genre", rs.getString("Genre"));

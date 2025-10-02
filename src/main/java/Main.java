@@ -10,9 +10,5 @@ public class Main {
         db.loadCsv();
         db.printCount();
 
-
-
-
-
     }
 }
