@@ -59,25 +59,26 @@ public class Controller {
             Agent agent = new Agent();
             String aiResponse = agent.startAgent(userInput);
             System.out.println("AI RESPONSE: " + aiResponse);
+
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
             exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type: application/json");
+
             //response body starts empty
-            //call static validation methods
             byte[] responseBytes = null;
             JSONObject JsonResponseBody = new JSONObject();
-            JsonResponseBody.put("AgentResponse",aiResponse);
+            JsonResponseBody.put("AgentResponse", aiResponse);
+
+            //call static validation methods
             if (Database.validateInput(aiResponse) && Database.validateInputTable(aiResponse)) {
                 JSONArray JsonResult = Database.executeQuery(aiResponse);
                 JsonResponseBody.put("JsonResultSet",JsonResult);
 
                 //return results in http response
                 System.out.println(JsonResult);
-
             }
             responseBytes = JsonResponseBody.toString().getBytes();
             System.out.println(JsonResponseBody);
-
 
             exchange.sendResponseHeaders(200, responseBytes.length); //200 OK measures output length
             OutputStream output = exchange.getResponseBody();

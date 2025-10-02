@@ -151,28 +151,4 @@ public class Database {
         return resultToJson;
     }
 
-//    private static Map<String, String> processResultset(ResultSet rs) {
-//        Map<String, String> results = new LinkedHashMap<>();
-//        int i = 0;
-//        try {
-//            while (rs.next()) {
-//                i++;
-//                String film = rs.getString("Film");
-//                String genre = rs.getString("Genre");
-//                String leadStudio = rs.getString("Lead_Studio");
-//                int audienceScore = rs.getInt("Audience_Score_pc");
-//                double profitability = rs.getDouble("Profitability");
-//                int rottenTomatoes = rs.getInt("Rotten_Tomatoes_pc");
-//                double worldwideGross = rs.getDouble("Worldwide_Gross");
-//                int year = rs.getInt("Year");
-//                String filmDetails = String.format("{\"Name\":\"%s\",\"Genre\":\"%s\",\"Lead Studio\":\"%s\",\"Audience Score\":\"%d%%\",\"Profitability\":\"%.2f\",\"Rotten Tomatoes\":\"%d%%\",\"Worldwide Gross\":\"$%.2f\",\"Year\":\"%d\"}", film, genre, leadStudio, audienceScore, profitability, rottenTomatoes, worldwideGross, year);
-//                String index = String.format("\"%s\"", i);
-//                results.put(index, filmDetails);
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        }
-//        return results;
-//    }
 }
