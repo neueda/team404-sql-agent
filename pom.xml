@@ -39,6 +39,26 @@
             <artifactId>json</artifactId>
             <version>20231013</version>
         </dependency>
+
+        <!--logging framework used by google ADK (Optional) -->
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+
+        <!-- Logback Implementation -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk</artifactId>
+            <version>0.3.0</version>
+        </dependency>
     </dependencies>
 
     <!-- Build Section how your project is compiled, tested, and packaged -->

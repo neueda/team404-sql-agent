@@ -9,5 +9,10 @@ public class Main {
         db.createTable();
         db.loadCsv();
         db.printCount();
+
+
+
+
+
     }
 }
