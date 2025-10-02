@@ -18,8 +18,8 @@
 
     <!-- Dependencies Section where Maven should fetch dependencies from -->
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <!-- load H2 embedded database drivers -->
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -27,36 +27,51 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin  -->
         <!-- this Maven plugin enables us to build fat/uber Jar files -->
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin  -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
             <version>3.7.1</version>
         </dependency>
+
+        <!-- allows us to format the response body as a Json object conveniently -->
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
         </dependency>
 
-        <!--logging framework used by google ADK (Optional) -->
-        <!-- SLF4J API -->
+        <!-- SLF4J API - logging framework used by google ADK (Optional) -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api  -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.30</version>
         </dependency>
 
-        <!-- Logback Implementation -->
+        <!-- Implementation of the SLF4J facade -->
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
+        <!-- Google ADK framework (Mandatory to create an agent) -->
+        <!-- https://mvnrepository.com/artifact/com.google.adk/google-adk -->
         <dependency>
             <groupId>com.google.adk</groupId>
             <artifactId>google-adk</artifactId>
+            <version>0.3.0</version>
+        </dependency>
+
+        <!-- Google ADK dev tools (Optional) -->
+        <!-- https://mvnrepository.com/artifact/com.google.adk/google-adk-dev -->
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk-dev</artifactId>
             <version>0.3.0</version>
         </dependency>
     </dependencies>
