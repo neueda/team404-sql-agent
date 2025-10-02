@@ -67,16 +67,9 @@
             <version>0.3.0</version>
         </dependency>
 
-        <!-- Google ADK dev tools (Optional) -->
-        <!-- https://mvnrepository.com/artifact/com.google.adk/google-adk-dev -->
-        <dependency>
-            <groupId>com.google.adk</groupId>
-            <artifactId>google-adk-dev</artifactId>
-            <version>0.3.0</version>
-        </dependency>
-    </dependencies>
+</dependencies>
 
-    <!-- Build Section how your project is compiled, tested, and packaged -->
+<!-- Build Section how your project is compiled, tested, and packaged -->
     <build>
         <!-- Plugins section -->
         <plugins>
