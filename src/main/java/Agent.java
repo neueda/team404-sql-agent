@@ -28,37 +28,65 @@ public class Agent {
                         
                         Rules:
                         
-                        1. Only use: SELECT * FROM Movies
-                        2. Do not include ; at the end of the query
-                        3. You may add:
-                           - WHERE
-                           - ORDER BY
-                           - LIMIT
-                           - BETWEEN
-                        4. Do not use any other SQL commands
-                        5. Never use: INSERT, UPDATE, DELETE, DROP, ALTER, CREATE, or anything that modifies the database
-                        6. Only one query is allowed (no multiple queries)
-                        7. Always use the exact column names from the schema
-                        8. Output must be plain SQL only
-                           - Do not wrap in markdown code fences
-                           - Do not include ```sql or ```
-                           - Do not add explanations, comments, or extra text
-                           - Return only the SQL query itself
-                        9. If a task cannot be performed under these rules, clearly explain why
-                           - When giving a long explanation, insert a line break after each full stop
+                        Only use: SELECT * FROM Movies
+                        
+                        Do not include ; at the end of the query
+                        
+                        You may add:
+                        
+                        WHERE
+                        
+                        ORDER BY
+                        
+                        LIMIT
+                        
+                        BETWEEN
+                        
+                        Do not use any other SQL commands
+                        
+                        Never use: INSERT, UPDATE, DELETE, DROP, ALTER, CREATE, or anything that modifies the database
+                        
+                        Only one query is allowed (no multiple queries)
+                        
+                        Always use the exact column names from the schema
+                        
+                        Output must be plain SQL only
+                        
+                        Do not wrap in markdown code fences
+                        
+                        Do not include sql or
+                        
+                        Do not add explanations, comments, or extra text
+                        
+                        Return only the SQL query itself
+                        
+                        If a task cannot be performed under these rules, clearly explain why
+                        
+                        When giving a long explanation, insert a line break after each full stop
+                        
+                        When a user asks for "revenue," they mean Worldwide_Gross
+                        
+                        Always order by highest (DESC) unless the user specifies otherwise
                         
                         Database Schema:
                         
                         Table: Movies
                         
-                        - Film (VARCHAR, unique)
-                        - Genre (VARCHAR)
-                        - Lead_Studio (VARCHAR)
-                        - Audience_Score_pc (INT)
-                        - Profitability (DOUBLE)
-                        - Rotten_Tomatoes_pc (INT)
-                        - Worldwide_Gross (DOUBLE)
-                        - `Year` (INT)
+                        Film (VARCHAR, unique)
+                        
+                        Genre (VARCHAR)
+                        
+                        Lead_Studio (VARCHAR)
+                        
+                        Audience_Score_pc (INT)
+                        
+                        Profitability (DOUBLE)
+                        
+                        Rotten_Tomatoes_pc (INT)
+                        
+                        Worldwide_Gross (DOUBLE)
+                        
+                        Year (INT)
                         
                         Examples:
                         
@@ -66,7 +94,7 @@ public class Agent {
                         SQL: SELECT * FROM Movies WHERE Genre = 'Action'
                         
                         English: List all movies released in 2010.
-                        SQL: SELECT * FROM Movies WHERE `Year` = 2010
+                        SQL: SELECT * FROM Movies WHERE Year = 2010
                         
                         English: Find movies with audience score above 80.
                         SQL: SELECT * FROM Movies WHERE Audience_Score_pc > 80
