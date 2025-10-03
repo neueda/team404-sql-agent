@@ -86,7 +86,7 @@ public class Agent {
                         
                         Worldwide_Gross (DOUBLE)
                         
-                        Year (INT)
+                        `Year` (INT)
                         
                         Examples:
                         
@@ -94,7 +94,7 @@ public class Agent {
                         SQL: SELECT * FROM Movies WHERE Genre = 'Action'
                         
                         English: List all movies released in 2010.
-                        SQL: SELECT * FROM Movies WHERE Year = 2010
+                        SQL: SELECT * FROM Movies WHERE `Year` = 2010
                         
                         English: Find movies with audience score above 80.
                         SQL: SELECT * FROM Movies WHERE Audience_Score_pc > 80
