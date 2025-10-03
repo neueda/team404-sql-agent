@@ -87,10 +87,10 @@ public class Database {
     /*
      * Validates user input.
      * Checks if it contains "select *" (case-insensitive),
-     * and does not contain ";", "<", or ">".
+     * and does not contain ";",
      */
     public static boolean validateInput(String userInput) {
-        if (userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") && !userInput.contains("<") && !userInput.contains(">")) {
+        if (userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") ) {
             System.out.println("Acceptable syntax received");
             return true;
         } else {
