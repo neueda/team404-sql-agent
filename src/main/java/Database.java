@@ -90,7 +90,7 @@ public class Database {
      * and does not contain ";",
      */
     public static boolean validateInput(String userInput) {
-        if (userInput.toLowerCase().startsWith("select * from") && !userInput.contains(";") ) {
+        if (userInput.toLowerCase().replaceAll("\\s", "").startsWith("select*from") && !userInput.contains(";") ) {
             System.out.println("Acceptable syntax received");
             return true;
         } else {
@@ -103,7 +103,7 @@ public class Database {
      * validate user input to make sure right table name
      */
     public static boolean validateInputTable(String userInput) {
-        if (userInput.toLowerCase().contains("from movies")) {
+        if (userInput.toLowerCase().replaceAll("\\s", "").contains("frommovies")) {
             System.out.println("Valid table received");
             return true;
         } else {
