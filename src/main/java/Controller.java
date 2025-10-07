@@ -56,9 +56,9 @@ public class Controller {
         if ("GET".equals(exchange.getRequestMethod())) {
             Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
             String userInput = params.get("query").getFirst();
-            Agent agent = new Agent();
-            String aiResponse = agent.startAgent(userInput);
-            System.out.println("AI RESPONSE: " + aiResponse);
+            //Agent agent = new Agent();
+            String aiResponse = userInput;
+            System.out.println("AI RESPONSE: ");
 
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT");
