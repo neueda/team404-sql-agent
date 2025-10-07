@@ -42,6 +42,8 @@ public class Agent {
                         
                         BETWEEN
                         
+                        OFFSET
+                        
                         Do not use any other SQL commands
                         
                         Never use: INSERT, UPDATE, DELETE, DROP, ALTER, CREATE, or anything that modifies the database
