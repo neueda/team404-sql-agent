@@ -90,7 +90,7 @@ public class Database {
      * and does not contain ";",
      */
     public static boolean validateInput(String userInput) {
-        if (userInput.toLowerCase().replaceAll("\\s", "").startsWith("select*from") && !userInput.contains(";") ) {
+        if (userInput.toLowerCase().replaceAll("\\s", "").startsWith("select*from") && !userInput.contains(";") &&!userInput.toLowerCase().contains("join") ) {
             System.out.println("Acceptable syntax received");
             return true;
         } else {
