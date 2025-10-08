@@ -8,6 +8,7 @@ import java.sql.*;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -90,11 +91,11 @@ public class Database {
      * and does not contain ";",
      */
     public static boolean validateInput(String userInput) {
-        if (userInput.toLowerCase().replaceAll("\\s", "").startsWith("select*from") && !userInput.contains(";") &&!userInput.toLowerCase().contains("join") ) {
-            System.out.println("Acceptable syntax received");
+        if (userInput.toLowerCase().replaceAll("\\s", "").startsWith("select*from") && !userInput.contains(";") && !userInput.toLowerCase().contains("join") ) {
+            System.out.println("validateInput: Acceptable syntax received");
             return true;
         } else {
-            System.out.println("The input is Invalid please try again");
+            System.out.println("validateInput: The input is Invalid please try again");
             return false;
         }
     }
@@ -104,10 +105,37 @@ public class Database {
      */
     public static boolean validateInputTable(String userInput) {
         if (userInput.toLowerCase().replaceAll("\\s", "").contains("frommovies")) {
-            System.out.println("Valid table received");
+            System.out.println("validateInputTable: Valid table received");
+
+            //check if the column name is in the table column list
+            ArrayList<String> columns = new ArrayList<String>();
+            columns.add("film");
+            columns.add("genre");
+            columns.add("lead_studio");
+            columns.add("audience_score_pc");
+            columns.add("profitability");
+            columns.add("rotten_tomatoes_pc");
+            columns.add("worldwide_gross");
+            columns.add("year");
+
+            //we only need to check columns for "where =" and "order by" conditions
+            if (userInput.toLowerCase().contains("where") || userInput.toLowerCase().contains("order by")) {
+                boolean validCol = false;
+                for (String header : columns) {
+                    if (userInput.toLowerCase().contains(header)){
+                        System.out.println("validateInputTable: Valid column name");
+                        validCol = true;
+                        break;
+                    }
+                }
+                if (!validCol) {
+                    System.out.println("validateInputTable: Column name does not exist");
+                    return false;
+                }
+            }
             return true;
         } else {
-            System.out.println("The table is Invalid please try again");
+            System.out.println("validateInputTable: The table is Invalid please try again");
             return false;
         }
     }
