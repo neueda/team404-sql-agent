@@ -28,8 +28,11 @@ public class Controller {
     public void httpStart() throws IOException {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", PORT), 0);
+            // The new HealthCheckHandler
+            HealthCheckHandler healthCheckHandler = new HealthCheckHandler();
+            server.createContext("/", healthCheckHandler::handler);
+
             server.createContext("/api/hello", this::handleQuery);
-            server.createContext("/", this::handleHealthCheck);
             server.setExecutor(null);
             server.start();
             System.out.println("SERVER IS RUNNING ON PORT " + PORT);
@@ -39,14 +42,7 @@ public class Controller {
         }
     }
 
-    /*
-     * Sends a response to a health check request to confirm that the server is healthy
-     */
-    private void handleHealthCheck(HttpExchange exchange) throws IOException {
-        System.out.println("HealthCheck Received request method: " + exchange.getRequestMethod());
-        exchange.sendResponseHeaders(200, 0);
-        exchange.close();
-    }
+
 
     /*
      * Receives request from frontend, sends an appropriate response to the request method
@@ -57,7 +53,7 @@ public class Controller {
             Map<String, List<String>> params = splitQuery(exchange.getRequestURI().getRawQuery());
             String userInput = params.get("query").getFirst();
             Agent agent = new Agent();
-            String aiResponse = agent.startAgent(userInput);
+            String aiResponse = agent.startAgent(userInput); //userinput;
             System.out.println("AI RESPONSE: " + aiResponse);
 
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
