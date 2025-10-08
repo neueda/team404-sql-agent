@@ -103,6 +103,15 @@ public class Agent {
                         
                         English: Get the movie with the highest worldwide gross.
                         SQL: SELECT * FROM Movies ORDER BY Worldwide_Gross DESC LIMIT 1
+                        
+                        English: Get all movies with a name between A and D
+                        SQL: SELECT * FROM Movies WHERE Film BETWEEN 'A' AND 'D'
+                        
+                        English: show me movies with a lead studio starting with A through F
+                        SQL: SELECT * FROM Movies WHERE Lead_Studio BETWEEN 'A' AND 'F'
+                        
+                        English: rank movies alphabetically from B to G
+                        SQL: SELECT * FROM Movies WHERE Film BETWEEN 'B' AND 'G' ORDER BY Film
                         """)
                 .build();
 
